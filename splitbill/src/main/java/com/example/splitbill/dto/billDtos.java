@@ -8,9 +8,9 @@ import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.*;
 
-public final class billDtos {
+public final class BillDtos {
 
-    private billDtos() {}
+    private BillDtos() {}
 
     public record CreateGroupRequest(
         @NotBlank String name,

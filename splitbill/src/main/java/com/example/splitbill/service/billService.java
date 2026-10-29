@@ -1,7 +1,7 @@
 
 package com.example.splitbill.service;
 
-import com.example.splitbill.dto.billDtos.*;
+import com.example.splitbill.dto.BillDtos.*;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -13,14 +13,14 @@ import java.math.RoundingMode;
 import java.util.*;
 
 @Service
-public class billService {
+public class BillService {
 
     private static final BigDecimal ZERO = BigDecimal.ZERO;
 
     private final Map<UUID, BillGroup> groups = new HashMap<>();
     private final int serviceChargePct;
 
-    public billService( @Value("${app.github-username}") String githubUsername) {
+    public BillService( @Value("${app.github-username}") String githubUsername) {
         if (githubUsername == null || githubUsername.isBlank()) {
             throw new IllegalArgumentException(
                 "GitHub username must be configured"

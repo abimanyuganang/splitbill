@@ -1,0 +1,32 @@
+# Stage 1: Build Spring Boot application
+FROM eclipse-temurin:21-jdk-alpine AS builder
+
+WORKDIR /app
+
+# Copy Maven wrapper and pom.xml
+COPY .mvn/ .mvn/
+COPY mvnw pom.xml ./
+
+# Make Maven wrapper executable
+RUN chmod +x mvnw
+
+# Download dependencies
+RUN ./mvnw dependency:go-offline -q
+
+# Copy source code and build application
+COPY src/ src/
+RUN ./mvnw package -DskipTests -q
+
+# Stage 2: Run application
+FROM eclipse-temurin:21-jre-alpine AS runtime
+
+WORKDIR /app
+
+# Copy compiled JAR from builder
+COPY --from=builder /app/target/*.jar app.jar
+
+# Expose required challenge port
+EXPOSE 4110
+
+# Start Spring Boot
+ENTRYPOINT ["java", "-jar", "app.jar"]

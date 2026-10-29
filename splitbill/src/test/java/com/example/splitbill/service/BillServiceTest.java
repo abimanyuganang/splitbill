@@ -18,8 +18,6 @@ class BillServiceTest {
 
     @BeforeEach
     void setUp() {
-        // "abc" = 97 + 98 + 99 = 294
-        // 294 % 10 = 4%
         billService = new BillService("abc");
 
         GroupResponse group = billService.createGroup(
@@ -34,24 +32,24 @@ class BillServiceTest {
 
     @Test
     void shouldCalculateCorrectSettlement() {
-        // Alice pays RM90 for everyone.
+        // Alice pays for everyone.
         billService.addExpense(
             groupId,
             new AddExpenseRequest(
                 "Dinner",
                 "Alice",
-                new BigDecimal("90.00"),
+                new BigDecimal("90000"),
                 List.of("Alice", "Bob", "Charlie")
             )
         );
 
-        // Bob pays RM60 for everyone.
+        // Bob pays 60.000
         billService.addExpense(
             groupId,
             new AddExpenseRequest(
                 "Transport",
                 "Bob",
-                new BigDecimal("60.00"),
+                new BigDecimal("60000"),
                 List.of("Alice", "Bob", "Charlie")
             )
         );
@@ -60,14 +58,14 @@ class BillServiceTest {
             billService.getSettlement(groupId);
 
         assertEquals(
-            new BigDecimal("150.00"),
+            new BigDecimal("150000"),
             result.totalExpenses()
         );
 
         assertEquals(4, result.serviceChargePct());
 
         assertEquals(
-            new BigDecimal("6.00"),
+            new BigDecimal("6000"),
             result.serviceChargeAmount()
         );
 
@@ -77,7 +75,7 @@ class BillServiceTest {
             new TransferResponse(
                 "Charlie",
                 "Alice",
-                new BigDecimal("40.00")
+                new BigDecimal("40000")
             ),
             result.settlements().get(0)
         );
@@ -86,7 +84,7 @@ class BillServiceTest {
             new TransferResponse(
                 "Charlie",
                 "Bob",
-                new BigDecimal("10.00")
+                new BigDecimal("10000")
             ),
             result.settlements().get(1)
         );
@@ -99,7 +97,7 @@ class BillServiceTest {
             new AddExpenseRequest(
                 "Lunch",
                 "Alice",
-                new BigDecimal("100.00"),
+                new BigDecimal("100000"),
                 List.of("Alice", "Bob", "Charlie")
             )
         );
@@ -113,12 +111,12 @@ class BillServiceTest {
             .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         assertEquals(
-            new BigDecimal("100.00"),
+            new BigDecimal("100000"),
             totalShares
         );
 
         assertEquals(
-            new BigDecimal("33.34"),
+            new BigDecimal("33334"),
             result.balances().get(0).share()
         );
     }
